@@ -1,19 +1,20 @@
-CREATE DATABASE IF NOT EXISTS products;
+drop database if exists products;
+CREATE DATABASE products;
 
-USE products;
+\c products
 
 CREATE TABLE products(
-  id int not null auto_increment,
+  id  serial,
   name varchar(40) not null,
   slogan varchar(125) null,
-  description varchar(200) null,
+  description varchar(1000) null,
   category varchar(40) not null,
-  default_price int not null
+  default_price int not null,
   PRIMARY KEY ( id )
 );
 
 CREATE TABLE features(
-  id INT NOT NULL AUTO_INCREMENT,
+  id serial,
   product_id int not null,
   feature VARCHAR(30) null,
   value VARCHAR(60) null,
@@ -21,28 +22,34 @@ CREATE TABLE features(
   FOREIGN KEY (product_id) REFERENCES products(id)
 );
 CREATE TABLE styles(
-  id INT NOT NULL AUTO_INCREMENT,
+  id serial,
   product_id int not null,
-  name varchar(60) null
-  sale_price int null,
-  original_price int null,
-  default_style int null
+  name varchar(60) null,
+  sale_price text null,
+  original_price text null,
+  default_style boolean default false,
   PRIMARY KEY ( id ),
   FOREIGN KEY (product_id) REFERENCES products(id)
 );
 CREATE TABLE skus(
-  id INT NOT NULL AUTO_INCREMENT,
+  id serial,
   style_id int not null,
-  size VARCHAR(5) null,
+  size VARCHAR(15) null,
   quantity int null,
   PRIMARY KEY ( id ),
   FOREIGN KEY (style_id) REFERENCES styles(id)
 );
 CREATE TABLE photos(
-  id INT NOT NULL AUTO_INCREMENT,
+  id serial,
   style_id int not null,
-  url VARCHAR(500) null,
-  thumbnail_url VARCHAR(500) null,
+  url text null,
+  thumbnail_url text null,
   PRIMARY KEY ( id ),
   FOREIGN KEY (style_id) REFERENCES styles(id)
 );
+
+copy products from '/Users/michael/Desktop/HR School Stuff/SDC/CSV data/product.csv' delimiter ',' csv header;
+copy features from '/Users/michael/Desktop/HR School Stuff/SDC/CSV data/features.csv' delimiter ',' csv header;
+copy styles from '/Users/michael/Desktop/HR School Stuff/SDC/CSV data/styles.csv' delimiter ',' csv header;
+copy skus from '/Users/michael/Desktop/HR School Stuff/SDC/CSV data/skus.csv' delimiter ',' csv header;
+copy photos from '/Users/michael/Desktop/HR School Stuff/SDC/CSV data/photos.csv' delimiter ',' csv header;
