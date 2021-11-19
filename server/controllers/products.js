@@ -1,13 +1,16 @@
 const express = require('express');
+const pool = require('../../database');
 
-const app = express();
-const pool = require('');
+const getAll = (req, res) => {
+  pool.query('select * from products limit 5', (err, results) => {
+    if (err) {
+      throw (err);
+    } else {
+      res.send(results.rows);
+    }
+  });
+};
 
 module.exports = {
-  get(req, res) {
-    res.send('hello');
-    const result = db.query('select * from products limit {5}');
-    // .end(result)
-    // }
-  },
+  getAll,
 };
