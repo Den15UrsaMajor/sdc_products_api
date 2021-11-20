@@ -1,16 +1,16 @@
 const express = require('express');
-const pool = require('../../database');
+const models = require('../models');
 
-const getAll = (req, res) => {
-  pool.query('select * from products limit 5', (err, results) => {
-    if (err) {
-      throw (err);
-    } else {
-      res.send(results.rows);
-    }
-  });
-};
+const app = express();
 
 module.exports = {
-  getAll,
+  get: (req, res) => {
+    console.log('req', req.query);
+    // req.query and req.params, pass into invocation of getAll
+    // log req to see how it's structured
+    models.products.getAll(req.query)
+      .then((result) => {
+        res.send(result);
+      });
+  },
 };

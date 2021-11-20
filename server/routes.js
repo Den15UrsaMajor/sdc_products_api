@@ -2,7 +2,7 @@ const router = require('express').Router();
 const controller = require('./controllers');
 
 // products
-router.get('/products', controller.products.getAll);
+router.get('/products', controller.products.get);
 // router.post('/products', controller.products.post);
 
 // // features
