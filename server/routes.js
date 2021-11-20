@@ -3,6 +3,7 @@ const controller = require('./controllers');
 
 // products
 router.get('/products', controller.products.get);
+router.get('/products/:product_id', controller.productId.get);
 // router.post('/products', controller.products.post);
 
 // // features
