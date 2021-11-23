@@ -11,7 +11,7 @@ router.get('/products', controller.products.get);
 // router.post('/features', controller.features.post);
 
 // // styles
-// router.get('/styles', controller.styles.get);
+// router.get('/products/:product_id/styles', controller.styles.get);
 // router.post('/styles', controller.styles.post);
 
 // //skus
