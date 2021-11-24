@@ -12,9 +12,9 @@ const getAll = async (params) => {
   try {
     if (product_id && !style_id) {
       const idResult = await client.query(`select
-         p.id,
+        p.id,
         p.name,
-         p.slogan,
+        p.slogan,
         p.description,
         p.category,
         p.default_price,
@@ -35,14 +35,14 @@ const getAll = async (params) => {
     if (style_id) {
       console.log('trying');
       const idResult = await client.query(`select
-        'product_id', p.id,
-        'results', results
+        p.id as product_id,
+        results
         from products p
         left join (
           select product_id,
         json_agg(
           json_build_object(
-            'style_id', s.style_id,
+            'style_id', s.product_id,
             'name', s.name,
             'original_price', s.original_price,
             'sale_price', s.sale_price,
@@ -50,32 +50,34 @@ const getAll = async (params) => {
             'photos', photos,
             'skus', skus
           )
-        ) results from styles s
-            left join (
-              select style_id,
-              json_agg(
-                json_build_object(
-                  'thumbnail_url', ph.thumbnail_url,
-                  'url', ph.url
-                )
-              ) photos
-              from photos ph
-              )
-              ph on s.product_id = ph.style_id
+        ) results
+        from styles s
+        left join (
+          select style_id,
+          json_agg(
+            json_build_object(
+              'thumbnail_url', ph.thumbnail_url,
+              'url', ph.url
+            )
+          ) photos
+          from photos ph
           group by style_id
-            left join (
-              select style_id,
-              json_build_object(
-                sk.id, json_build_object(
-                  'quantity', sk.quantity,
-                  'size', sk.size
-                )
-              ) skus
-              from skus sk
-              group by sk.id
-            ) sk on s.id = sk.style_id
-              group by style_id
-        ) s on p.id = s.product_id where id = $1 and style_id = $2`, [product_id, style_id]);
+        )
+          ph on s.product_id = ph.style_id
+          left join (
+            select style_id,
+            json_object_agg(
+             id,
+             json_build_object(
+                'quantity', sk.quantity,
+                'size', sk.size
+              )
+            ) skus
+            from skus sk
+            group by style_id
+          ) sk on s.id = sk.style_id
+          group by product_id
+          ) s on p.id = s.product_id where p.id = $1 and product_id = $2`, [product_id, style_id]);
       console.log(typeof idResult.rows);
       return idResult.rows;
     }
@@ -94,11 +96,3 @@ module.exports = {
   getAll,
   postOne,
 };
-
-// 'id', p.id,
-// 'name', p.name,
-// 'slogan', p.slogan,
-// 'description', p.description,
-// 'category', p.category,
-// 'default_price', p.default_price,
-// 'features', features
