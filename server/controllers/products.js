@@ -5,9 +5,7 @@ const app = express();
 
 module.exports = {
   get: (req, res) => {
-    // req.query and req.params, pass into invocation of getAll
-    // log req to see how it's structured
-
+    // will run if no product ID is given
     models.products.getAll(req.query)
       .then((result) => {
         res.send(result);

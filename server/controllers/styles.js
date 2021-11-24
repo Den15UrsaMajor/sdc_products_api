@@ -7,10 +7,12 @@ module.exports = {
   get: (req, res) => {
     // req.query and req.params, pass into invocation of getAll
     // log req to see how it's structured
-    models.styles.getStyle(req.query)
+    models.products.getStyle(req.params)
       .then((result) => {
-        console.log('styles');
         res.send(result);
+      })
+      .catch((err) => {
+        console.log(err);
       });
   },
 };

@@ -7,7 +7,6 @@ const router = require('./routes.js');
 
 app.use(express.json());
 // app.use(cors());
-app.use('/products/:product_id/styles', router);
 app.use('/', router);
 // app.get('/products', db.getAll);
 

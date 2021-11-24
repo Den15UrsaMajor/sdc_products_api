@@ -3,39 +3,64 @@
 const pool = require('../../database');
 
 const getAll = async (params) => {
-  // console.log(params);
+  console.log('GET ALL');
   const client = await pool.connect();
   const { product_id } = params;
   const { count } = params;
   const productCount = count || 5;
   const { page } = params || 1;
-  const { style_id } = params;
   try {
-    if (product_id && !style_id) {
-      const idResult = await client.query(`select
-        p.id,
-        p.name,
-        p.slogan,
-        p.description,
-        p.category,
-        p.default_price,
-        features
-      from products p
-      left join (select
-        product_id,
-        json_agg(
-          json_build_object(
-            'feature', f.feature,
-            'value', f.value
-          )
-        ) features from features f
-        group by product_id
-        ) f on p.id = f.product_id where p.id = $1`, [product_id]);
-      return idResult.rows;
-    }
-    if (style_id) {
-      console.log('trying');
-      const idResult = await client.query(`select
+    const result = await client.query('select * from products limit $1', [productCount]);
+    return result.rows;
+  } finally {
+    client.release();
+  }
+};
+// Will return request for one product
+const getOne = async (params) => {
+  console.log('GET ONE');
+  const client = await pool.connect();
+  const { product_id } = params;
+  const { count } = params;
+  const productCount = count || 5;
+  const { page } = params || 1;
+  try {
+    const idResult = await client.query(`select
+  p.id,
+  p.name,
+  p.slogan,
+  p.description,
+  p.category,
+  p.default_price,
+  features
+from products p
+left join (select
+  product_id,
+  json_agg(
+    json_build_object(
+      'feature', f.feature,
+      'value', f.value
+    )
+  ) features from features f
+  group by product_id
+  ) f on p.id = f.product_id where p.id = $1`, [product_id]);
+    return idResult.rows[0];
+  } finally {
+    client.release();
+  }
+};
+// Will return styles for one product, responding to url path ending in /styles
+const getStyle = async (params) => {
+  console.log('GET STYLE');
+  console.log(params);
+  const client = await pool.connect();
+  const { product_id } = params;
+  const { count } = params;
+  const productCount = count || 5;
+  const { page } = params || 1;
+  try {
+    console.log('trying');
+    const idResult = await client.query(`select
         p.id as product_id,
         results
         from products p
@@ -43,7 +68,7 @@ const getAll = async (params) => {
           select product_id,
         json_agg(
           json_build_object(
-            'style_id', s.product_id,
+            'style_id', s.id,
             'name', s.name,
             'original_price', s.original_price,
             'sale_price', s.sale_price,
@@ -78,13 +103,9 @@ const getAll = async (params) => {
             group by style_id
           ) sk on s.id = sk.style_id
           group by product_id
-          ) s on p.id = s.product_id where p.id = $1 and product_id = $2`, [product_id, style_id]);
-      console.log(typeof idResult.rows);
-      return idResult.rows;
-    }
-    console.log('just products');
-    const result = await client.query('select * from products limit $1', [productCount]);
-    return result.rows;
+          ) s on p.id = s.product_id where p.id = $1`, [product_id]);
+    // console.log(idResult);
+    return idResult.rows[0];
   } finally {
     client.release();
   }
@@ -92,5 +113,6 @@ const getAll = async (params) => {
 
 module.exports = {
   getAll,
-
+  getOne,
+  getStyle,
 };
