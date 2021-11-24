@@ -6,7 +6,8 @@ const getAll = async (params) => {
   // console.log(params);
   const client = await pool.connect();
   const { product_id } = params;
-  const { count } = params || 5;
+  const { count } = params;
+  const productCount = count || 5;
   const { page } = params || 1;
   const { style_id } = params;
   try {
@@ -81,18 +82,15 @@ const getAll = async (params) => {
       console.log(typeof idResult.rows);
       return idResult.rows;
     }
-    const result = await client.query('select * from products limit $1', [count]);
+    console.log('just products');
+    const result = await client.query('select * from products limit $1', [productCount]);
     return result.rows;
   } finally {
     client.release();
   }
 };
 
-const postOne = async (params) => {
-  console.log(params);
-  const result = await client.query('insert into ');
-};
 module.exports = {
   getAll,
-  postOne,
+
 };
