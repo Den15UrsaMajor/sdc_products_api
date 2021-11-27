@@ -2,6 +2,8 @@
 // const { features } = require('process');
 const pool = require('../../database');
 
+// created structure of async calls from : https://node-postgres.com/features/transactions
+
 const getAll = async (params) => {
   console.log('GET ALL');
   const client = await pool.connect();
@@ -52,14 +54,14 @@ left join (select
 // Will return styles for one product, responding to url path ending in /styles
 const getStyle = async (params) => {
   console.log('GET STYLE');
-  console.log(params);
   const client = await pool.connect();
   const { product_id } = params;
   const { count } = params;
   const productCount = count || 5;
   const { page } = params || 1;
   try {
-    console.log('trying');
+    // Used this article to create structure of query:
+    // https://stackoverflow.com/questions/42222968/create-nested-json-from-sql-query-postgres-9-4
     const idResult = await client.query(`select
         p.id as product_id,
         results
