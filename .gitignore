@@ -1,7 +1,7 @@
 config.js
 node_modules
-/data/10features.csv
-/data/10photos.csv
-/data/10products.csv
-/data/10skus.csv
-/data/10styles.csv
+/data/features.csv
+/data/photos.csv
+/data/product.csv
+/data/skus.csv
+/data/styles.csv

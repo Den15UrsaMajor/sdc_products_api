@@ -6,16 +6,17 @@ const pool = require('../../database');
 
 const getAll = async (params) => {
   console.log('GET ALL');
-  const client = await pool.connect();
+  // const client = await pool.connect();
+  // try commenting out, and on line 16 try pool.query instead of client
   const { product_id } = params;
   const { count } = params;
   const productCount = count || 5;
   const { page } = params || 1;
   try {
-    const result = await client.query('select * from products limit $1', [productCount]);
+    const result = await pool.query('select * from products limit $1', [productCount]);
     return result.rows;
   } finally {
-    client.release();
+    // pool.release();
   }
 };
 // Will return request for one product

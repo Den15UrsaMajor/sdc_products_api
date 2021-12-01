@@ -1,6 +1,6 @@
 // query for database
 const { features } = require('process');
-const pool = require('../../database');
+const pool = require('../index.js');
 
 const getStyle = async (params) => {
   // console.log(params);

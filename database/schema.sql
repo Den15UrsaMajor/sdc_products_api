@@ -48,8 +48,21 @@ CREATE TABLE photos(
   FOREIGN KEY (style_id) REFERENCES styles(id)
 );
 
+-- copy products from '/seed/product.csv' delimiter ',' csv header;
+-- copy features from '/seed/features.csv' delimiter ',' csv header;
+-- copy styles from '/seed/styles.csv' delimiter ',' csv header;
+-- copy skus from '/seed/skus.csv' delimiter ',' csv header;
+-- copy photos from '/seed/photos.csv' delimiter ',' csv header;
+
+
 copy products from '/Users/michael/Desktop/HR School Stuff/SDC/CSV data/product.csv' delimiter ',' csv header;
 copy features from '/Users/michael/Desktop/HR School Stuff/SDC/CSV data/features.csv' delimiter ',' csv header;
 copy styles from '/Users/michael/Desktop/HR School Stuff/SDC/CSV data/styles.csv' delimiter ',' csv header;
 copy skus from '/Users/michael/Desktop/HR School Stuff/SDC/CSV data/skus.csv' delimiter ',' csv header;
 copy photos from '/Users/michael/Desktop/HR School Stuff/SDC/CSV data/photos.csv' delimiter ',' csv header;
+
+-- creates index on foreign keys
+create index feature_idx on features(product_id);
+create index style_idx on styles(product_id);
+create index skus_idx on skus(style_id);
+create index photo_idx on photos(style_id);
