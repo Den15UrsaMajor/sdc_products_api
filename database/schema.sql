@@ -54,13 +54,6 @@ copy styles from '/seed/styles.csv' delimiter ',' csv header;
 copy skus from '/seed/skus.csv' delimiter ',' csv header;
 copy photos from '/seed/photos.csv' delimiter ',' csv header;
 
-
--- copy products from '/SDC_PRODUCTS_API/product.csv' delimiter ',' csv header;
--- copy features from '/SDC_PRODUCTS_API/features.csv' delimiter ',' csv header;
--- copy styles from '/SDC_PRODUCTS_API/styles.csv' delimiter ',' csv header;
--- copy skus from '/SDC_PRODUCTS_API/skus.csv' delimiter ',' csv header;
--- copy photos from '/SDC_PRODUCTS_API/photos.csv' delimiter ',' csv header;
-
 -- creates index on foreign keys
 create index feature_idx on features(product_id);
 create index style_idx on styles(product_id);

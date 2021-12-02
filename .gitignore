@@ -1,7 +1,15 @@
 config.js
 node_modules
+<<<<<<< HEAD
 features.csv
 photos.csv
 product.csv
 skus.csv
 styles.csv
+=======
+/data/features.csv
+/data/photos.csv
+/data/product.csv
+/data/skus.csv
+/data/styles.csv
+>>>>>>> b6e644e7ebdbc7c0389eabe597e5185b0fb63d50
